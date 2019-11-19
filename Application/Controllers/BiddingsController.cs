@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Application.Exceptions;
 using Application.Helpers;
@@ -34,6 +35,14 @@ namespace Application.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Opens a bid on a given project
+        /// </summary>
+        /// <param name="bidDto">BidDto contains information about the project, how much the freelancer wants and so on</param>
+        /// <returns>A ok confirmation with the created bid object</returns>
+        /// <response code="200">Returns the newly created bid</response>
+        /// <response code="400">Badrequest for a wrong bidDto or invalid fields. The return message should show what went wrong</response>
+        /// <response code="404">The User was not found</response>
         [HttpPost]
         public async Task<IActionResult> OpenBid([FromBody] BidCreationDto bidDto)
         {
@@ -43,6 +52,10 @@ namespace Application.Controllers
             var createBid = _mapper.Map<Bid>(bidDto);
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.Name);
+                if (bidDto.FreelancerId != userId)
+                    throw new InvalidBid("User doesn't have access to this bid");
+
                 var createdBid = await _bidService.Open(createBid);
                 return Ok(createdBid);
             }
@@ -60,6 +73,14 @@ namespace Application.Controllers
             }
         }
 
+        /// <summary>
+        /// An employer can accept a bid
+        /// </summary>
+        /// <param name="bidId">The id of the bid wanted to accept</param>
+        /// <param name="bidDto">The object itself</param>
+        /// <returns>An empty OK if successful</returns>
+        /// <response code="200">Empty ok if successfully accepted</response>
+        /// <response code="400">Badrequest for a wrong bidDto or invalid fields. The return message should show what went wrong</response>
         [HttpPut("{bidId}")]
         public async Task<IActionResult> AcceptBid([FromHeader] string authorization, [FromRoute] string bidId, [FromBody] BidUpdateDto bidDto)
         {
@@ -72,7 +93,9 @@ namespace Application.Controllers
             var updateBid = _mapper.Map<Bid>(bidDto);
             try
             {
-                if (await _bidService.Accept(updateBid, authorization.Split(' ')[1]))
+                var userId = User.FindFirstValue(ClaimTypes.Name);
+
+                if (await _bidService.Accept(updateBid, authorization.Split(' ') [1], userId))
                     return Ok();
                 throw new InvalidBid();
             }

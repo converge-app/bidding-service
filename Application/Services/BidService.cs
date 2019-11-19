@@ -18,7 +18,7 @@ namespace Application.Services
     public interface IBidService
     {
         Task<Bid> Open(Bid bid);
-        Task<bool> Accept(Bid bid, string authorizationToken);
+        Task<bool> Accept(Bid bid, string authorizationToken, string userId);
     }
 
     public class BidService : IBidService
@@ -37,15 +37,27 @@ namespace Application.Services
             var project = await _client.GetProjectAsync(bid.ProjectId);
             if (project == null) throw new InvalidBid();
 
+            var existingBid = await _bidRepository.GetByFreelancerId(bid.FreelancerId);
+            if (existingBid != null)
+                throw new InvalidBid("User already has a bid pending");
+
             var createdBid = await _bidRepository.Create(bid);
 
-            return createdBid ?? throw new InvalidBid();
+            return createdBid ??
+                throw new InvalidBid();
         }
 
-        public async Task<bool> Accept(Bid bid, string authorizationToken)
+        public async Task<bool> Accept(Bid bid, string authorizationToken, string userId)
         {
             var project = await _client.GetProjectAsync(bid.ProjectId);
-            if (project == null) throw new InvalidBid("projectId invalid");
+            if (project == null)
+                throw new InvalidBid("projectId invalid");
+
+            if (project.OwnerId != userId)
+                throw new InvalidBid("User doesn't have permission to accept this bid");
+
+            if (!string.IsNullOrEmpty(project.FreelancerId))
+                throw new InvalidBid("Project cannot be accepted as a freelancer has already been chosen");
 
             project.FreelancerId = bid.FreelancerId;
 
