@@ -37,7 +37,7 @@ namespace Application.Services
             var project = await _client.GetProjectAsync(bid.ProjectId);
             if (project == null) throw new InvalidBid();
 
-            var existingBid = await _bidRepository.GetByFreelancerId(bid.FreelancerId);
+            var existingBid = await _bidRepository.GetByProjectAndFreelancer(bid.ProjectId, bid.FreelancerId);
             if (existingBid != null)
                 throw new InvalidBid("User already has a bid pending");
 
