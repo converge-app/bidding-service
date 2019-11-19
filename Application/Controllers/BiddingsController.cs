@@ -146,6 +146,11 @@ namespace Application.Controllers
         {
             try
             {
+                var bid = await _bidRepository.GetById(id);
+
+                if (bid.FreelancerId != User.FindFirstValue(ClaimTypes.Name))
+                    throw new ArgumentException("User doesn't have access to this resource");
+
                 await _bidRepository.Remove(id);
             }
             catch (Exception e)
