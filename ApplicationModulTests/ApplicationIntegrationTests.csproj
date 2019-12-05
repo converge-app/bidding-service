@@ -4,12 +4,13 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
 
         <IsPackable>false</IsPackable>
+
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="9.0.0" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2" />
+        <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
         <PackageReference Include="moq" Version="4.13.1" />

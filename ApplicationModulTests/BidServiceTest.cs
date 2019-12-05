@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace ApplicationIntegerationsTests
+namespace ApplicationIntegrationTests
 {
     public class BidServiceTest : IClassFixture<WebApplicationFactory<StartupDevelopment>>
     {
@@ -57,12 +57,14 @@ namespace ApplicationIntegerationsTests
             var client = _factory.CreateClient();
 
             var httpClient = new HttpClient();
-            var sa = new HttpClient();
             var authUser = await AuthUtility.GenerateAndAuthenticate(httpClient);
             AuthUtility.AddAuthorization(client, authUser.Token);
+            var projectsClient = new HttpClient();
+            AuthUtility.AddAuthorization(projectsClient, authUser.Token);
+            
 
             var project = ProjectUtility.GenerateProject(authUser.Id);
-            var pro = await ProjectUtility.CreateProject(client, project);
+            var pro = await ProjectUtility.CreateProject(projectsClient, project);
 
             Assert.NotNull(pro);
         }
