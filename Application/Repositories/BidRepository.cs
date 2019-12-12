@@ -12,7 +12,7 @@ namespace Application.Repositories
         Task<Bid> GetById(string id);
         Task<List<Bid>> GetByProject(string projectId);
         Task<List<Bid>> GetByFreelancerId(string freelancerId);
-        Task<List<Bid>> GetByProjectAndFreelancer(string projectId, string freelancerId);
+        Task<Bid> GetByProjectAndFreelancer(string projectId, string freelancerId);
         Task<Bid> Create(Bid bid);
         Task Update(string id, Bid bidIn);
         Task Remove(Bid bidIn);
@@ -35,10 +35,10 @@ namespace Application.Repositories
         public async Task<List<Bid>> GetByProject(string projectId) => await (await _bids.FindAsync(bid => bid.ProjectId == projectId)).ToListAsync();
         public async Task<List<Bid>> GetByFreelancerId(string freelancerId) => await (await _bids.FindAsync(bid => bid.FreelancerId == freelancerId)).ToListAsync();
 
-        public async Task<List<Bid>> GetByProjectAndFreelancer(string projectId, string freelancerId) => await (
+        public async Task<Bid> GetByProjectAndFreelancer(string projectId, string freelancerId) => await (
             await _bids.FindAsync(
                 bid => bid.ProjectId == projectId && bid.FreelancerId == freelancerId)
-        ).ToListAsync();
+        ).FirstOrDefaultAsync();
 
         public async Task<Bid> Create(Bid bid)
         {
