@@ -1,0 +1,29 @@
+@startuml
+interface IBidRepository {
+    Get() : Task<List<Bid>>
+    GetById(id:string) : Task<Bid>
+    GetByProject(projectId:string) : Task<List<Bid>>
+    GetByFreelancerId(freelancerId:string) : Task<List<Bid>>
+    GetByProjectAndFreelancer(projectId:string, freelancerId:string) : Task<Bid>
+    Create(bid:Bid) : Task<Bid>
+    Update(id:string, bidIn:Bid) : Task
+    Remove(bidIn:Bid) : Task
+    Remove(id:string) : Task
+    GetByProjectId(projectId:string) : Task<List<Bid>>
+}
+class BidRepository {
+    - <<readonly>> _bids : IMongoCollection<Bid>
+    + BidRepository(dbContext:IDatabaseContext)
+    + <<async>> Get() : Task<List<Bid>>
+    + <<async>> GetById(id:string) : Task<Bid>
+    + <<async>> GetByProject(projectId:string) : Task<List<Bid>>
+    + <<async>> GetByFreelancerId(freelancerId:string) : Task<List<Bid>>
+    + <<async>> GetByProjectAndFreelancer(projectId:string, freelancerId:string) : Task<Bid>
+    + <<async>> Create(bid:Bid) : Task<Bid>
+    + <<async>> Update(id:string, bidIn:Bid) : Task
+    + <<async>> Remove(bidIn:Bid) : Task
+    + <<async>> Remove(id:string) : Task
+    + <<async>> GetByProjectId(projectId:string) : Task<List<Bid>>
+}
+IBidRepository <|-- BidRepository
+@enduml

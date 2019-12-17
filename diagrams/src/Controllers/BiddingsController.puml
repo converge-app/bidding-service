@@ -1,0 +1,16 @@
+@startuml
+class BiddingsController {
+    - <<readonly>> _mapper : IMapper
+    - <<readonly>> _bidRepository : IBidRepository
+    - <<readonly>> _bidService : IBidService
+    + BiddingsController(bidService:IBidService, bidRepository:IBidRepository, mapper:IMapper)
+    + <<async>> OpenBid(bidDto:BidCreationDto) : Task<IActionResult>
+    + <<async>> AcceptBid(authorization:string, bidId:string, bidDto:BidUpdateDto) : Task<IActionResult>
+    + <<async>> GetAll() : Task<IActionResult>
+    + <<async>> GetByFreelancerId(id:string) : Task<IActionResult>
+    + <<async>> GetByProjectId(projectId:string) : Task<IActionResult>
+    + <<async>> GetById(id:string) : Task<IActionResult>
+    + <<async>> Delete(id:string) : Task<IActionResult>
+}
+ControllerBase <|-- BiddingsController
+@enduml

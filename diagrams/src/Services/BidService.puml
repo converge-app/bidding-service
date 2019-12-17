@@ -1,0 +1,14 @@
+@startuml
+interface IBidService {
+    Open(bid:Bid) : Task<Bid>
+    Accept(bid:Bid, authorizationToken:string, userId:string) : Task<bool>
+}
+class BidService {
+    - <<readonly>> _bidRepository : IBidRepository
+    - <<readonly>> _client : IClient
+    + BidService(bidRepository:IBidRepository, client:IClient)
+    + <<async>> Open(bid:Bid) : Task<Bid>
+    + <<async>> Accept(bid:Bid, authorizationToken:string, userId:string) : Task<bool>
+}
+IBidService <|-- BidService
+@enduml

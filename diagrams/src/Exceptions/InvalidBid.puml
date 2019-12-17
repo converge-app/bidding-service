@@ -1,0 +1,9 @@
+@startuml
+class InvalidBid {
+    + InvalidBid()
+    + InvalidBid(message:string)
+    + InvalidBid(message:string, inner:Exception)
+    # InvalidBid(info:SerializationInfo, context:StreamingContext)
+}
+Exception <|-- InvalidBid
+@enduml

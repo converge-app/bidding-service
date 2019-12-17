@@ -1,0 +1,16 @@
+@startuml
+!include .//Application/Startup.puml
+!include .//Application/StartupDevelopment.puml
+!include .//Application/Program.puml
+!include .//Exceptions/InvalidBid.puml
+!include .//Helpers/AutoMapperProfile.puml
+!include .//Services/BidService.puml
+!include .//Database/DatabaseContext.puml
+!include .//Controllers/BiddingsController.puml
+!include .//Controllers/HealthController.puml
+!include .//Repositories/BidRepository.puml
+!include .//Models/Entities/Bid.puml
+!include .//Models/DataTransferObjects/BidUpdateDto.puml
+!include .//Models/DataTransferObjects/BidCreationDto.puml
+!include .//Models/DataTransferObjects/BidDto.puml
+@enduml

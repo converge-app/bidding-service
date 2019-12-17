@@ -1,0 +1,9 @@
+@startuml
+class BidDto {
+    + Id : string <<get>> <<set>>
+    + ProjectId : string <<get>> <<set>>
+    + FreelancerId : string <<get>> <<set>>
+    + Message : string <<get>> <<set>>
+    + Amount : decimal <<get>> <<set>>
+}
+@enduml
